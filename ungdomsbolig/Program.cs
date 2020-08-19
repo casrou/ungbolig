@@ -139,9 +139,11 @@ namespace ungdomsbolig
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
 
-            var place = doc.DocumentNode.SelectNodes("//table[contains(@class, 'views-table')]");
-
             var result = new List<ILivable>();
+
+            var place = doc.DocumentNode.SelectNodes("//table[contains(@class, 'views-table')]");
+            if (place == null || place.Count() == 0) return result;
+
             foreach (var p in place)
             {
                 var tempName = p.SelectSingleNode("caption/a/div").InnerText.Trim();
@@ -176,8 +178,6 @@ namespace ungdomsbolig
                     result.Add(house);
                 }
             }            
-
-            // fill list
 
             return result;
         }
