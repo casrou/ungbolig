@@ -1,4 +1,4 @@
-# ungdomsbolig search tool
+# UngBolig
 Search housing on [ungdomsboligaarhus](https://ungdomsboligaarhus.dk) ([studenthousingaarhus](https://studenthousingaarhus.com/user)) by rent, size, or type.
 
 ## How to use
