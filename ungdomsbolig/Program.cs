@@ -51,7 +51,6 @@ namespace ungdomsbolig
                 {
                     Console.WriteLine($"{r.Description} - {r.Rent} kr. - {r.Size} m2 - {r.WaitingPeriod} - {r.Url}");
                 }
-                Console.WriteLine();
             }
         }
 
