@@ -16,7 +16,12 @@
         public override bool Equals(object obj)
         {
             //return base.Equals(obj);
-            return ((House)obj).Url == this.Url;
+            return ((House)obj).Url == Url;
+        }
+
+        public override int GetHashCode()
+        {
+            return Url.GetHashCode();
         }
     }
 
