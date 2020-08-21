@@ -1,7 +1,9 @@
-﻿using RestSharp;
+﻿using CsvHelper;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -28,6 +30,10 @@ namespace ungdomsbolig.WPF
     {
         private RestClient _client;
         private string _credentialsFileName = "credentials.json";
+        private string _searchResultsFileName = "searchResults.json";
+        //private string _waitingListFileName = "waitingList.json";
+        private string _csvFileName = "googlemymaps.csv";
+        private List<ILivable> _waitingList;
         public MainWindow()
         {
             InitializeComponent();            
@@ -56,44 +62,51 @@ namespace ungdomsbolig.WPF
 
         private async Task LoginWithCredentials(Credentials creds)
         {
-            //lblStatus
-            _client = SearchHelper.GetLoggedInClient(creds);
+            lblStatus.Content = "Logging in..";
+            var (client, name) = SearchHelper.GetLoggedInClientAndName(creds);
+            _client = client;
 
-            lblName.Content = "Name";
-            var waitingList = await GetAndSaveWaitingListAsync();
-            lblWaitingList.Content = waitingList.Count();
+            lblName.Content = name;
+            await UpdateWaitingList();
+            lblWaitingList.Content = _waitingList.Count();
 
             LoginPanel.Visibility = Visibility.Collapsed;
             SearchPanel.Visibility = Visibility.Visible;
+            lblStatus.Content = "Logged in";
         }
 
-        private async Task<IEnumerable<ILivable>> GetAndSaveWaitingListAsync()
+        private async Task UpdateWaitingList()
         {
-            var waitingList = await SearchHelper.GetAllPagesAndParseAsync(_client, "/user/apartments");
-            SearchHelper.SaveJson(waitingList, "waitingList.json");
-            return waitingList;
+            _waitingList = await SearchHelper.GetAllPagesAndParseAsync(_client, "/user/apartments");
         }
 
         private async void btnSearch_Click(object sender, RoutedEventArgs e)
         {
+            lblStatus.Content = "Retrieving houses..";
             var searchResults = await GetAndSaveSearchResultsAsync();
             lvHouses.ItemsSource = searchResults;
+            lblStatus.Content = "Houses retrieved";
         }
 
         private async Task<IEnumerable<ILivable>> GetAndSaveSearchResultsAsync()
         {
-            var filename = "searchResults.json";
-
+            var waitingList = cbWaitingList.IsChecked ?? false;
             var force = cbForce.IsChecked ?? false;
-            if (!force && File.Exists(filename)){
-                var json = File.ReadAllText(filename);
-                return JsonSerializer.Deserialize<List<House>>(json).Select(h => (ILivable)h);
-            }
 
-            //https://www.wpf-tutorial.com/listview-control/listview-filtering/
-            var waitingList = await SearchHelper.GetAllPagesAndParseAsync(_client, "/search");
-            SearchHelper.SaveJson(waitingList, filename);
-            return waitingList;
+            if (waitingList)
+            {
+                if(force) await UpdateWaitingList();
+                return _waitingList;
+            }
+            
+            if (!force && File.Exists(_searchResultsFileName)){
+                var json = File.ReadAllText(_searchResultsFileName);
+                return JsonSerializer.Deserialize<List<House>>(json).Select(h => (ILivable)h);
+            }                       
+
+            var searchResults = await SearchHelper.GetAllPagesAndParseAsync(_client, "/search");
+            SearchHelper.SaveJson(waitingList, _searchResultsFileName);
+            return searchResults;
         }
 
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -106,6 +119,57 @@ namespace ungdomsbolig.WPF
             };
             Process.Start(ps);
             e.Handled = true;
+        }
+
+        private void FilterSearch(object sender, RoutedEventArgs e) => UpdateFiltering();
+
+        private void UpdateFiltering()
+        {
+            //var test = (TextBox)sender;
+            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lvHouses.ItemsSource);
+            if (view == null) return;
+            view.Filter = s => (FilterRent(s) && FilterSize(s) && FilterExcludeWaitingList(s));
+        }
+
+        private bool FilterRent(object item)
+        {
+            int rent;
+            if (String.IsNullOrEmpty(tbSearchRent.Text) || !int.TryParse(tbSearchRent.Text, out rent))
+                return true;
+            return (item as House).Rent < rent;
+            //return ((item as House).Name.IndexOf(tbSearchRent.Text, StringComparison.OrdinalIgnoreCase) >= 0);
+        }
+
+        private bool FilterSize(object item)
+        {
+            int size;
+            if (String.IsNullOrEmpty(tbSearchSize.Text) || !int.TryParse(tbSearchSize.Text, out size))
+                return true;
+            return (item as House).Size > size;
+            //return ((item as House).Name.IndexOf(tbSearchRent.Text, StringComparison.OrdinalIgnoreCase) >= 0);
+        }
+
+        private bool FilterExcludeWaitingList(object item)
+        {
+            var exclude = cbSearchExcludeWaiting.IsChecked ?? false;
+            if (!exclude)
+                return true;
+            return !_waitingList.Contains((item as House));
+            //return ((item as House).Name.IndexOf(tbSearchRent.Text, StringComparison.OrdinalIgnoreCase) >= 0);
+        }
+
+        private void GenerateCSV(object sender, RoutedEventArgs e)
+        {
+            lblStatus.Content = "Generating CSV..";
+            var test = lvHouses.Items.Cast<House>();//.Select(h => { h.Rent = Convert.ToInt32(h.Rent); return h; });
+            var culture = CultureInfo.CreateSpecificCulture(CultureInfo.InvariantCulture.Name);
+            culture.NumberFormat = NumberFormatInfo.CurrentInfo;
+            using (var writer = new StreamWriter(_csvFileName))
+            using (var csv = new CsvWriter(writer, culture))
+            {
+                csv.WriteRecords(test);
+            }
+            lblStatus.Content = "CSV generated";
         }
     }
 }

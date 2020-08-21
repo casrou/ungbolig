@@ -15,37 +15,26 @@ namespace ungdomsbolig
         public decimal DownPayment { get; set; }
         public string Url { get; set; }
         public string FloorPlanUrl { get; set; }
+        public string Address { get => Description.Substring(Description.IndexOf('-') + 2); }
 
-        //public override bool Equals(object obj)
-        //{
-        //    return base.Equals(obj);
-        //}
+        public override bool Equals(object obj)
+        {
+            var house = obj as House;
+            if (house == null) return false;
+            return ToString() == house.ToString();
+                //base.Equals(obj);
+        }
 
-        //public override int GetHashCode()
-        //{
-        //    return Description.GetHashCode() + 
-        //}
+        public override string ToString()
+        {
+            return Url + "-" + Type + "-" + Size + "-" + Quantity + "-" + DownPayment + "-" + Rent;
+        }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
+
     }
-
-    //public static class NumberOfRooms
-    //{
-    //    public const string ROOM = "Værelse";
-    //    public const string ONE = "1 Værelses lejlighed";
-    //    public const string ONEPLUS = "1½ Værelses lejlighed";
-    //    public const string TWOSHARE = "2 Værelses lejlighed (delevenlig)";
-    //    public const string TWO = "2 Værelses lejlighed";
-    //    public const string TWOPLUSTHREE = "2½ - 3 Værelses lejlighed";
-
-    //    public string Choose(int choice)
-    //    {
-    //        switch (choice)
-    //        {
-    //            case choice <= 0:
-    //                return NumberOfRooms.ROOM;
-    //            case choice
-    //            default:
-    //                break;
-    //        }
-    //    }
-    //};
+    
 }

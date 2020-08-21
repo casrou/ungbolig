@@ -42,39 +42,49 @@
                 <DockPanel HorizontalAlignment="Stretch">
                     <Button Click="btnLogin_Click">Login</Button>
                 </DockPanel>
-                <CheckBox x:Name="cbRemember" ToolTip="Remember login information">Remember</CheckBox>
+                <CheckBox VerticalAlignment="Bottom" x:Name="cbRemember" ToolTip="Remember login information">Remember</CheckBox>
             </StackPanel>            
         </Border>
-        <Border x:Name="SearchPanel" Padding="10"  DockPanel.Dock="Top" Background="LightSkyBlue" BorderBrush="Gray" BorderThickness="0, 0, 0, 1" Visibility="Collapsed">
+        <Border x:Name="SearchPanel" Padding="10"  DockPanel.Dock="Top" Background="LightGreen" BorderBrush="Gray" BorderThickness="0, 0, 0, 1" Visibility="Collapsed">
             <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Vertical">
                     <Label>Min. size (m2)</Label>
-                    <TextBox Name="tbSearchSize"></TextBox>
+                    <TextBox TextChanged="FilterSearch" Name="tbSearchSize"></TextBox>
                 </StackPanel>
                 <StackPanel Orientation="Vertical">
                     <Label>Max. rent (kr)</Label>
-                    <TextBox Name="tbSearchType"></TextBox>
+                    <TextBox TextChanged="FilterSearch" Name="tbSearchRent"></TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Vertical">
+                    <Label>Exclude waiting list</Label>
+                    <CheckBox Checked="FilterSearch" Unchecked="FilterSearch"  Name="cbSearchExcludeWaiting"></CheckBox>
                 </StackPanel>
                 <DockPanel HorizontalAlignment="Stretch">
                     <Button x:Name="btnSearch" Click="btnSearch_Click">Update</Button>
                 </DockPanel>
-                <CheckBox x:Name="cbForce" ToolTip="Update all houses">Force</CheckBox>
+                <StackPanel Orientation="Vertical">
+                    <CheckBox VerticalAlignment="Bottom" x:Name="cbForce" ToolTip="Update all houses">Force</CheckBox>
+                    <CheckBox VerticalAlignment="Bottom" x:Name="cbWaitingList" ToolTip="Show waiting list houses">Waiting list</CheckBox>
+                </StackPanel>
             </StackPanel>
         </Border>
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
-            <StackPanel Orientation="Horizontal">
-                <Label>Name:</Label>
-                <Label Name="lblName"></Label>
+        <DockPanel DockPanel.Dock="Bottom">
+            <StackPanel Orientation="Horizontal" >
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Name:" />
+                    <Label Name="lblName"></Label>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Waiting list:" />
+                    <Label Name="lblWaitingList"></Label>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Status:" />
+                    <Label Name="lblStatus"></Label>
+                </StackPanel>                
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label>Waiting list:</Label>
-                <Label Name="lblWaitingList"></Label>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label>Status:</Label>
-                <Label Name="lblStatus"></Label>
-            </StackPanel>
-        </StackPanel>
+            <Button Click="GenerateCSV" ToolTip="Generate .csv-file for importing into Google MyMaps" HorizontalAlignment="Right" Width="50" Content="CSV"></Button>
+        </DockPanel>
         <!--<StackPanel Orientation="Vertical">
             <TextBlock x:Name="Test">Results</TextBlock>
         </StackPanel>-->
@@ -83,8 +93,8 @@
                 <GridView>
                     <GridViewColumn Header="Name" Width="175" DisplayMemberBinding="{Binding Name}" />
                     <GridViewColumn Header="Description" Width="350" DisplayMemberBinding="{Binding Description}" />
-                    <GridViewColumn Header="Size" Width="50" DisplayMemberBinding="{Binding Size}" />
-                    <GridViewColumn Header="Rent" Width="75" DisplayMemberBinding="{Binding Rent}" />
+                    <GridViewColumn Header="Size (m2)" Width="75" DisplayMemberBinding="{Binding Size}" />
+                    <GridViewColumn Header="Rent (kr.)" Width="75" DisplayMemberBinding="{Binding Rent}" />
                     <GridViewColumn Header="Link" Width="250">
                         <GridViewColumn.CellTemplate>
                         <DataTemplate>

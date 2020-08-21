@@ -11,7 +11,7 @@ namespace ungdomsbolig.Shared
 {
     public static class SearchHelper
     {
-        public static RestClient GetLoggedInClient(Credentials login)
+        public static (RestClient, string) GetLoggedInClientAndName(Credentials login)
         {
             var client = new RestClient("https://www.ungdomsboligaarhus.dk");
             client.CookieContainer = new System.Net.CookieContainer();
@@ -25,10 +25,13 @@ namespace ungdomsbolig.Shared
             request.AddParameter("op", "Log+ind");
             IRestResponse response = client.Execute(request);
             //Console.WriteLine(response.Content);
-            return client;
+
+            var doc = new HtmlDocument();
+            doc.LoadHtml(response.Content);
+            var name = doc.DocumentNode.SelectSingleNode("//div[contains(@class, 'name')]/div/span");
+
+            return (client, name.InnerText);
         }
-
-
 
         public static async Task<IEnumerable<ILivable>> DetermineSearchResultsAsync(RestClient client)
         {

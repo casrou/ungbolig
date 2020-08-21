@@ -16,7 +16,7 @@ namespace ungdomsbolig
         static async Task Main(string[] args)
         {
             var creds = DetermineCredentials();
-            var client = SearchHelper.GetLoggedInClient(creds);
+            var (client, name) = SearchHelper.GetLoggedInClientAndName(creds);
 
             var waitingListTask = SearchHelper.GetAllPagesAndParseAsync(client, "/user/apartments");            
             var searchResultsTask = SearchHelper.DetermineSearchResultsAsync(client);
