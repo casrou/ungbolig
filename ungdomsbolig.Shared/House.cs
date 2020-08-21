@@ -1,7 +1,10 @@
-﻿namespace ungdomsbolig
+﻿using System.Linq;
+
+namespace ungdomsbolig
 {
     public class House : ILivable
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal Size { get; set; }
@@ -13,16 +16,15 @@
         public string Url { get; set; }
         public string FloorPlanUrl { get; set; }
 
-        public override bool Equals(object obj)
-        {
-            //return base.Equals(obj);
-            return ((House)obj).Url == Url;
-        }
+        //public override bool Equals(object obj)
+        //{
+        //    return base.Equals(obj);
+        //}
 
-        public override int GetHashCode()
-        {
-            return Url.GetHashCode();
-        }
+        //public override int GetHashCode()
+        //{
+        //    return Description.GetHashCode() + 
+        //}
     }
 
     //public static class NumberOfRooms

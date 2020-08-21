@@ -1,6 +1,6 @@
 ﻿namespace ungdomsbolig
 {
-    internal interface ILivable
+    public interface ILivable
     {
         string Name { get; set; }
         string Description { get; set; }
