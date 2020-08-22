@@ -28,9 +28,9 @@ namespace ungdomsbolig.Shared
 
             var doc = new HtmlDocument();
             doc.LoadHtml(response.Content);
-            var name = doc.DocumentNode.SelectSingleNode("//div[contains(@class, 'name')]/div/span");
-
-            return (client, name.InnerText);
+            var nameNode = doc.DocumentNode.SelectSingleNode("//div[contains(@class, 'name')]/div/span");
+            var name = nameNode?.InnerText ?? "Unknown"; 
+            return (client, name);
         }
 
         public static async Task<IEnumerable<ILivable>> DetermineSearchResultsAsync(RestClient client)

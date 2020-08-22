@@ -29,61 +29,66 @@
         </Style>
     </Window.Resources>
     <DockPanel HorizontalAlignment="Stretch">
-        <Border x:Name="LoginPanel" Padding="10"  DockPanel.Dock="Top" Background="LightSkyBlue" BorderBrush="Gray" BorderThickness="0, 0, 0, 1">
+        <Border x:Name="LoginPanel" Padding="10"  DockPanel.Dock="Top" Background="LightSkyBlue" BorderBrush="Gray" 
+                BorderThickness="0, 0, 0, 1">
             <StackPanel Orientation="Horizontal" >
                 <StackPanel Orientation="Vertical">
-                    <Label>Application number</Label>
+                    <Label Content="Application number"/>
                     <TextBox Name="tbLoginName"></TextBox>
                 </StackPanel>
                 <StackPanel Orientation="Vertical">
-                    <Label>Password</Label>
+                    <Label Content="Password"/>
                     <PasswordBox Name="tbLoginPassword"></PasswordBox>
                 </StackPanel>
                 <DockPanel HorizontalAlignment="Stretch">
-                    <Button Click="btnLogin_Click">Login</Button>
+                    <Button Click="btnLogin_Click" Content="Login"/>
                 </DockPanel>
-                <CheckBox VerticalAlignment="Bottom" x:Name="cbRemember" ToolTip="Remember login information">Remember</CheckBox>
+                <CheckBox VerticalAlignment="Bottom" x:Name="cbRemember" ToolTip="Remember login information" Content="Remember"/>
             </StackPanel>            
         </Border>
-        <Border x:Name="SearchPanel" Padding="10"  DockPanel.Dock="Top" Background="LightGreen" BorderBrush="Gray" BorderThickness="0, 0, 0, 1" Visibility="Collapsed">
+        <Border x:Name="SearchPanel" Padding="10"  DockPanel.Dock="Top" Background="LightGreen" BorderBrush="Gray" 
+                BorderThickness="0, 0, 0, 1" Visibility="Collapsed">
             <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Vertical">
-                    <Label>Min. size (m2)</Label>
-                    <TextBox TextChanged="FilterSearch" Name="tbSearchSize"></TextBox>
+                    <Label Content="Min. size (m2)"/>
+                    <TextBox TextChanged="FilterSearch" Name="tbSearchSize"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical">
-                    <Label>Max. rent (kr)</Label>
-                    <TextBox TextChanged="FilterSearch" Name="tbSearchRent"></TextBox>
+                    <Label Content="Max. rent (kr)"/>
+                    <TextBox TextChanged="FilterSearch" Name="tbSearchRent"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical">
-                    <Label>Exclude waiting list</Label>
-                    <CheckBox Checked="FilterSearch" Unchecked="FilterSearch"  Name="cbSearchExcludeWaiting"></CheckBox>
+                    <Label Content="Exclude waiting list"/>
+                    <CheckBox HorizontalAlignment="Center" Checked="FilterSearch" Unchecked="FilterSearch"  Name="cbSearchExcludeWaiting"/>
                 </StackPanel>
                 <DockPanel HorizontalAlignment="Stretch">
-                    <Button x:Name="btnSearch" Click="btnSearch_Click">Update</Button>
+                    <Button x:Name="btnSearch" Click="btnSearch_Click" Content="Update"/>
                 </DockPanel>
                 <StackPanel Orientation="Vertical">
-                    <CheckBox VerticalAlignment="Bottom" x:Name="cbForce" ToolTip="Update all houses">Force</CheckBox>
-                    <CheckBox VerticalAlignment="Bottom" x:Name="cbWaitingList" ToolTip="Show waiting list houses">Waiting list</CheckBox>
+                    <CheckBox VerticalAlignment="Bottom" x:Name="cbForce" 
+                              ToolTip="Update all houses" Content="Force"/>
+                    <CheckBox VerticalAlignment="Bottom" x:Name="cbWaitingList" 
+                              ToolTip="Show waiting list houses" Content="Waiting list"/>
                 </StackPanel>
             </StackPanel>
         </Border>
-        <DockPanel DockPanel.Dock="Bottom">
-            <StackPanel Orientation="Horizontal" >
+        <DockPanel DockPanel.Dock="Bottom" Margin="0,0,0,5">
+            <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Name:" />
-                    <Label Name="lblName"></Label>
+                    <Label Name="lblName"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Waiting list:" />
-                    <Label Name="lblWaitingList"></Label>
+                    <Label Name="lblWaitingList"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Status:" />
-                    <Label Name="lblStatus"></Label>
+                    <Label Name="lblStatus"/>
                 </StackPanel>                
             </StackPanel>
-            <Button Click="GenerateCSV" ToolTip="Generate .csv-file for importing into Google MyMaps" HorizontalAlignment="Right" Width="50" Content="CSV"></Button>
+            <Button Click="GenerateCSV" ToolTip="Generate .csv-file for importing into Google MyMaps"
+                    HorizontalAlignment="Right" Width="50" Content="CSV"/>
         </DockPanel>
         <!--<StackPanel Orientation="Vertical">
             <TextBlock x:Name="Test">Results</TextBlock>
