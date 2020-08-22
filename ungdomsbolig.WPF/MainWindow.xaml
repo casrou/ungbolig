@@ -1,0 +1,118 @@
+﻿<Window x:Class="ungdomsbolig.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ungdomsbolig.WPF"
+        mc:Ignorable="d"
+        Loaded="Window_Loaded"
+        Title="MainWindow" Height="600" Width="1000">
+    <Window.Resources>
+        <!-- One style for each *type* of control on the window -->
+        <Style TargetType="TextBox">
+            <!--<Setter Property="Margin" Value="10, 2"/>-->
+            <Setter Property="Width" Value="150"/>
+        </Style>
+        <Style TargetType="PasswordBox">
+            <!--<Setter Property="Margin" Value="10, 2"/>-->
+            <Setter Property="Width" Value="150"/>
+        </Style>
+        <Style TargetType="Label">
+            <!--<Setter Property="Margin" Value="5, 2"/>-->
+        </Style>
+        <Style TargetType="StackPanel">
+            <Setter Property="Margin" Value="5, 0"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="10, 0"/>
+            <Setter Property="Width" Value="100"/>
+        </Style>
+    </Window.Resources>
+    <DockPanel HorizontalAlignment="Stretch">
+        <Border x:Name="LoginPanel" Padding="10"  DockPanel.Dock="Top" Background="LightSkyBlue" BorderBrush="Gray" 
+                BorderThickness="0, 0, 0, 1">
+            <StackPanel Orientation="Horizontal" >
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Application number"/>
+                    <TextBox Name="tbLoginName"></TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Password"/>
+                    <PasswordBox Name="tbLoginPassword"></PasswordBox>
+                </StackPanel>
+                <DockPanel HorizontalAlignment="Stretch">
+                    <Button Click="btnLogin_Click" Content="Login"/>
+                </DockPanel>
+                <CheckBox VerticalAlignment="Bottom" x:Name="cbRemember" ToolTip="Remember login information" Content="Remember"/>
+            </StackPanel>            
+        </Border>
+        <Border x:Name="SearchPanel" Padding="10"  DockPanel.Dock="Top" Background="LightGreen" BorderBrush="Gray" 
+                BorderThickness="0, 0, 0, 1" Visibility="Collapsed">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Min. size (m2)"/>
+                    <TextBox TextChanged="FilterSearch" Name="tbSearchSize"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Max. rent (kr)"/>
+                    <TextBox TextChanged="FilterSearch" Name="tbSearchRent"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Exclude waiting list"/>
+                    <CheckBox HorizontalAlignment="Center" Checked="FilterSearch" Unchecked="FilterSearch"  Name="cbSearchExcludeWaiting"/>
+                </StackPanel>
+                <DockPanel HorizontalAlignment="Stretch">
+                    <Button x:Name="btnSearch" Click="btnSearch_Click" Content="Update"/>
+                </DockPanel>
+                <StackPanel Orientation="Vertical">
+                    <CheckBox VerticalAlignment="Bottom" x:Name="cbForce" 
+                              ToolTip="Update all houses" Content="Force"/>
+                    <CheckBox VerticalAlignment="Bottom" x:Name="cbWaitingList" 
+                              ToolTip="Show waiting list houses" Content="Waiting list"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <DockPanel DockPanel.Dock="Bottom" Margin="0,0,0,5">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Name:" />
+                    <Label Name="lblName"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Waiting list:" />
+                    <Label Name="lblWaitingList"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Status:" />
+                    <Label Name="lblStatus"/>
+                </StackPanel>                
+            </StackPanel>
+            <Button Click="GenerateCSV" ToolTip="Generate .csv-file for importing into Google MyMaps"
+                    HorizontalAlignment="Right" Width="50" Content="CSV"/>
+        </DockPanel>
+        <!--<StackPanel Orientation="Vertical">
+            <TextBlock x:Name="Test">Results</TextBlock>
+        </StackPanel>-->
+        <ListView Margin="10" Name="lvHouses">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" Width="175" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Description" Width="350" DisplayMemberBinding="{Binding Description}" />
+                    <GridViewColumn Header="Size (m2)" Width="75" DisplayMemberBinding="{Binding Size}" />
+                    <GridViewColumn Header="Rent (kr.)" Width="75" DisplayMemberBinding="{Binding Rent}" />
+                    <GridViewColumn Header="Link" Width="250">
+                        <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                              <Hyperlink NavigateUri="{Binding Path=Url}" RequestNavigate="Hyperlink_OnRequestNavigate">
+                                <TextBlock Text="{Binding Path=Url}"/>
+                              </Hyperlink>
+                            </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </DockPanel>
+</Window>

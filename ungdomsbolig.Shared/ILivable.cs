@@ -1,9 +1,10 @@
 ﻿namespace ungdomsbolig
 {
-    internal interface ILivable
+    public interface ILivable
     {
         string Name { get; set; }
         string Description { get; set; }
+        string Address { get; }
         string Url { get; set; }
         decimal Rent { get; set; }
         decimal DownPayment { get; set; }
