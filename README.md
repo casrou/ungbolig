@@ -5,7 +5,7 @@
 
 - Organize your waiting list.
 
-- Export CSV (For Google MyMaps import)
+- Export CSV (For Google MyMaps import / Currently only available for WPF)
 
 ## Getting started
 ### Console (Unix/Windows)
