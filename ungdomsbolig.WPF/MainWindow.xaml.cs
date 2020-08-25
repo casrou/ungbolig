@@ -98,7 +98,7 @@ namespace ungdomsbolig.WPF
             }                       
 
             var searchResults = await SearchHelper.GetAllPagesAndParseAsync(_client, "/search");
-            SearchHelper.SaveJson(waitingList, _searchResultsFileName);
+            SearchHelper.SaveJson(searchResults, _searchResultsFileName);
             return searchResults;
         }
 
