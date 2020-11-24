@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ungdomsbolig.WPF"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
-        Title="MainWindow" Height="600" Width="1000">
+        Title="UngBolig" Height="600" Width="1000">
     <Window.Resources>
         <!-- One style for each *type* of control on the window -->
         <Style TargetType="TextBox">
@@ -98,8 +98,8 @@
                 <GridView>
                     <GridViewColumn Header="Name" Width="175" DisplayMemberBinding="{Binding Name}" />
                     <GridViewColumn Header="Description" Width="350" DisplayMemberBinding="{Binding Description}" />
-                    <GridViewColumn Header="Size (m2)" Width="75" DisplayMemberBinding="{Binding Size}" />
-                    <GridViewColumn Header="Rent (kr.)" Width="75" DisplayMemberBinding="{Binding Rent}" />
+                    <GridViewColumn x:Name="Size" Header="Size (m2)" Width="75" DisplayMemberBinding="{Binding Size}" />
+                    <GridViewColumn x:Name="Rent" Header="Rent (kr.)" Width="75" DisplayMemberBinding="{Binding Rent}" />
                     <GridViewColumn Header="Link" Width="250">
                         <GridViewColumn.CellTemplate>
                         <DataTemplate>
